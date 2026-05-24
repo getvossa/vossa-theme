@@ -1,0 +1,544 @@
+<section class="vossa-section vossa-product-main" data-section-id="{{ section.id }}">
+  <div class="vossa-section-inner">
+    <div class="vossa-product-layout">
+
+      {%- comment -%} ========== IMAGE GALLERY ========== {%- endcomment -%}
+      <div class="vossa-product-gallery">
+        <div class="vossa-product-image-wrap">
+          {%- if product.featured_image -%}
+            <img
+              src="{{ product.featured_image | image_url: width: 1400 }}"
+              srcset="{{ product.featured_image | image_url: width: 700 }} 700w, {{ product.featured_image | image_url: width: 1400 }} 1400w, {{ product.featured_image | image_url: width: 2000 }} 2000w"
+              sizes="(max-width: 900px) 100vw, 50vw"
+              alt="{{ product.featured_image.alt | default: product.title | escape }}"
+              class="vossa-product-image"
+              loading="eager"
+              fetchpriority="high"
+            >
+          {%- else -%}
+            <div class="vossa-product-image-placeholder">
+              <div class="vossa-kit-mock" aria-hidden="true">
+                <div class="vossa-kit-disc sm"></div>
+                <div class="vossa-kit-disc"></div>
+                <div class="vossa-kit-disc lg"></div>
+                <div class="vossa-kit-disc"></div>
+                <div class="vossa-kit-disc sm"></div>
+              </div>
+              <p>Upload product image in Shopify → Products</p>
+            </div>
+          {%- endif -%}
+
+          {%- if section.settings.show_floating_badge -%}
+            <div class="vossa-product-float-badge glass">
+              <p class="vossa-feat-label">{{ section.settings.badge_label }}</p>
+              <p class="vossa-feat-value">{{ section.settings.badge_value }}</p>
+            </div>
+          {%- endif -%}
+        </div>
+
+        {%- comment -%} Thumbnail strip if multiple images {%- endcomment -%}
+        {%- if product.images.size > 1 -%}
+          <div class="vossa-product-thumbs">
+            {%- for img in product.images limit: 5 -%}
+              <button type="button" class="vossa-product-thumb glass-pill" data-vossa-thumb-src="{{ img | image_url: width: 1400 }}" aria-label="View image {{ forloop.index }}">
+                <img src="{{ img | image_url: width: 160 }}" alt="" loading="lazy">
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} ========== BUY BOX ========== {%- endcomment -%}
+      <div class="vossa-product-buybox">
+        <p class="vossa-eyebrow">{{ section.settings.eyebrow }}</p>
+        <h1 class="vossa-product-title">{{ product.title }}</h1>
+
+        {%- if section.settings.short_value_prop != blank -%}
+          <p class="vossa-product-tagline">{{ section.settings.short_value_prop }}</p>
+        {%- endif -%}
+
+        {%- comment -%} Rating chip ABOVE price (iOS 26 social-proof pattern) {%- endcomment -%}
+        {%- if section.settings.show_rating_chip -%}
+          <a class="vossa-rating-chip glass" href="#reviews" aria-label="Customer rating">
+            <span class="vossa-rating-chip-stars" aria-hidden="true">
+              <svg viewBox="0 0 20 20"><path d="M10 1l2.6 5.6 6.4.7-4.8 4.4 1.3 6.3L10 14.8 4.5 18l1.3-6.3L1 7.3l6.4-.7z"/></svg>
+              <svg viewBox="0 0 20 20"><path d="M10 1l2.6 5.6 6.4.7-4.8 4.4 1.3 6.3L10 14.8 4.5 18l1.3-6.3L1 7.3l6.4-.7z"/></svg>
+              <svg viewBox="0 0 20 20"><path d="M10 1l2.6 5.6 6.4.7-4.8 4.4 1.3 6.3L10 14.8 4.5 18l1.3-6.3L1 7.3l6.4-.7z"/></svg>
+              <svg viewBox="0 0 20 20"><path d="M10 1l2.6 5.6 6.4.7-4.8 4.4 1.3 6.3L10 14.8 4.5 18l1.3-6.3L1 7.3l6.4-.7z"/></svg>
+              <svg viewBox="0 0 20 20"><defs><linearGradient id="rcgrad{{ section.id }}"><stop offset="50%" stop-color="currentColor"/><stop offset="50%" stop-color="rgba(0,0,0,0.12)"/></linearGradient></defs><path fill="url(#rcgrad{{ section.id }})" d="M10 1l2.6 5.6 6.4.7-4.8 4.4 1.3 6.3L10 14.8 4.5 18l1.3-6.3L1 7.3l6.4-.7z"/></svg>
+            </span>
+            <span class="vossa-rating-chip-score">{{ section.settings.rating_chip_score }}</span>
+            <span class="vossa-rating-chip-sep" aria-hidden="true"></span>
+            <span class="vossa-rating-chip-label">{{ section.settings.rating_chip_label }}</span>
+          </a>
+        {%- endif -%}
+
+        {%- comment -%}
+          Price + compare-at + savings.
+          Every displayed price has class="money" and data-money-cents — that's
+          the convention Bucks Currency Converter and every other major Shopify
+          currency app scans for. The app's MutationObserver picks up changes
+          when variants swap and re-converts automatically.
+        {%- endcomment -%}
+        <div class="vossa-product-price-row">
+          <p class="vossa-product-price money" data-vossa-display-price data-money-cents="{{ product.price }}">{{ product.price | money_without_trailing_zeros }}</p>
+          {%- if product.compare_at_price > product.price -%}
+            <p class="vossa-product-compare money" data-vossa-display-compare data-money-cents="{{ product.compare_at_price }}">{{ product.compare_at_price | money_without_trailing_zeros }}</p>
+            {%- assign savings = product.compare_at_price | minus: product.price -%}
+            <p class="vossa-product-save glass-pill">Save <span class="money" data-money-cents="{{ savings }}">{{ savings | money_without_trailing_zeros }}</span></p>
+          {%- endif -%}
+        </div>
+
+        {%- comment -%} Variant picker — supports color + shape style {%- endcomment -%}
+        {%- if product.variants.size > 1 -%}
+          <form id="vossa-product-form-{{ section.id }}" class="vossa-product-form" action="/cart/add" method="post" enctype="multipart/form-data" data-vossa-product-form>
+            <input type="hidden" name="form_type" value="product">
+            <input type="hidden" name="utf8" value="✓">
+
+            {%- comment -%}
+              Per-option picker. AUTO-HIDDEN when any app block (bundles, FBT, etc.)
+              is added to this section — those apps include their own variant
+              selectors, so showing both creates duplicate UI. The hidden form
+              select below still keeps a valid variant ID for the cart submission
+              fallback.
+
+              Per-option logic: pills when values are short (e.g. "S, M, L"),
+              dropdown when any value is long (e.g. "Classic Black with Round
+              tabs"). Threshold 14 chars.
+            {%- endcomment -%}
+            {%- if product.options.size > 0 and section.blocks.size == 0 -%}
+              {%- for option in product.options_with_values -%}
+                {%- assign max_value_length = 0 -%}
+                {%- for value in option.values -%}
+                  {%- assign vlen = value | size -%}
+                  {%- if vlen > max_value_length -%}{%- assign max_value_length = vlen -%}{%- endif -%}
+                {%- endfor -%}
+
+                <div class="vossa-product-option-group">
+                  <label class="vossa-product-option-label" for="vossa-opt-{{ section.id }}-{{ forloop.index0 }}">{{ option.name }}</label>
+
+                  {%- if max_value_length > 14 -%}
+                    <div class="vossa-product-option-select-wrap glass-pill">
+                      <select
+                        id="vossa-opt-{{ section.id }}-{{ forloop.index0 }}"
+                        class="vossa-product-option-select"
+                        data-vossa-option-index="{{ forloop.index0 }}"
+                        data-vossa-option-select>
+                        {%- for value in option.values -%}
+                          <option value="{{ value | escape }}" {% if option.selected_value == value %}selected{% endif %}>{{ value }}</option>
+                        {%- endfor -%}
+                      </select>
+                      <svg class="vossa-product-option-chevron" viewBox="0 0 12 12" width="12" height="12" aria-hidden="true">
+                        <path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                      </svg>
+                    </div>
+                  {%- else -%}
+                    <div class="vossa-product-option-values">
+                      {%- for value in option.values -%}
+                        <button
+                          type="button"
+                          class="vossa-product-option-value glass-pill {% if option.selected_value == value %}vossa-product-option-value--active{% endif %}"
+                          data-vossa-option-index="{{ forloop.parentloop.index0 }}"
+                          data-vossa-option-value="{{ value | escape }}">
+                          {{ value }}
+                        </button>
+                      {%- endfor -%}
+                    </div>
+                  {%- endif -%}
+                </div>
+              {%- endfor -%}
+            {%- endif -%}
+
+            {%- comment -%} Hidden variant id — set by JS as options change {%- endcomment -%}
+            <select name="id" data-vossa-variant-id-select class="vossa-product-variant-id">
+              {%- for variant in product.variants -%}
+                <option
+                  value="{{ variant.id }}"
+                  data-vossa-options="{{ variant.options | join: '||' }}"
+                  data-vossa-price="{{ variant.price }}"
+                  data-vossa-compare="{{ variant.compare_at_price }}"
+                  data-vossa-available="{{ variant.available }}"
+                  {% if variant == product.selected_or_first_available_variant %}selected{% endif %}>
+                  {{ variant.title }} — {{ variant.price | money }}
+                </option>
+              {%- endfor -%}
+            </select>
+
+            <button type="submit" class="vossa-cta vossa-cta--glass vossa-product-add-btn" data-vossa-add-btn>
+              <span data-vossa-add-text>{{ section.settings.cta_text }}</span>
+              <span class="arrow">→</span>
+            </button>
+          </form>
+
+        {%- else -%}
+
+          <form id="vossa-product-form-{{ section.id }}" class="vossa-product-form" action="/cart/add" method="post" enctype="multipart/form-data" data-vossa-product-form>
+            <input type="hidden" name="form_type" value="product">
+            <input type="hidden" name="utf8" value="✓">
+            <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+            <button type="submit" class="vossa-cta vossa-cta--glass vossa-product-add-btn" data-vossa-add-btn>
+              <span data-vossa-add-text>{{ section.settings.cta_text }}</span>
+              <span class="arrow">→</span>
+            </button>
+          </form>
+
+        {%- endif -%}
+
+        <p class="vossa-product-trust">{{ section.settings.trust_line }}</p>
+
+        {%- comment -%}
+          App block injection zone — bundles widget, FBT, post-CTA upsells, etc.
+          User adds app blocks via customizer ("Add block" → choose app).
+          Lands between the trust line and kit summary — the natural psychological
+          spot for bundle pickers (right after "I want this," before "what's inside").
+        {%- endcomment -%}
+        {%- if section.blocks.size > 0 -%}
+          <div class="vossa-product-app-blocks">
+            {%- for block in section.blocks -%}
+              {%- case block.type -%}
+                {%- when '@app' -%}
+                  <div class="vossa-product-app-block" {{ block.shopify_attributes }}>
+                    {% render block %}
+                  </div>
+              {%- endcase -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        {%- comment -%} Inside-the-kit summary (Hormozi value stack — what they get) {%- endcomment -%}
+        {%- if section.settings.show_kit_summary -%}
+          <div class="vossa-product-kit-summary glass">
+            <p class="vossa-eyebrow">{{ section.settings.kit_eyebrow }}</p>
+            <ul class="vossa-product-kit-list">
+              <li><span class="vossa-product-kit-qty">4</span><span><strong>Reusable magnetic bands</strong>S, M, L, XL — find your fit, keep it forever</span></li>
+              <li><span class="vossa-product-kit-qty">90</span><span><strong>Adhesive tabs</strong>2 per session — covers 45 nights</span></li>
+              <li><span class="vossa-product-kit-qty">1</span><span><strong>Fit & use guide</strong>60-second setup</span></li>
+            </ul>
+          </div>
+        {%- endif -%}
+
+        {%- comment -%} Guarantee block (Hormozi risk reversal) {%- endcomment -%}
+        {%- if section.settings.show_guarantee -%}
+          <div class="vossa-product-guarantee glass-pill">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6">
+              <path d="M12 2l9 4v6c0 5-3.5 9-9 10-5.5-1-9-5-9-10V6l9-4z"/>
+              <path d="M9 12l2 2 4-4"/>
+            </svg>
+            <span>{{ section.settings.guarantee_text }}</span>
+          </div>
+        {%- endif -%}
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{%- comment -%}
+  Vossa product page client logic:
+   1. Variant matching from option button clicks
+   2. AJAX cart submit to /cart/add.js
+   3. Multi-event dispatch for cart-drawer apps (Slide Cart, Cartmate, etc.)
+   4. Image swap from thumbnail clicks
+   5. Native form-submit fallback if fetch fails
+{%- endcomment -%}
+<script>
+(function() {
+  var sectionId = {{ section.id | json }};
+  var form = document.getElementById('vossa-product-form-' + sectionId);
+  if (!form) return;
+
+  var btn         = form.querySelector('[data-vossa-add-btn]');
+  var btnText     = form.querySelector('[data-vossa-add-text]');
+  var variantSel  = form.querySelector('[data-vossa-variant-id-select]');
+  var optionBtns  = form.querySelectorAll('[data-vossa-option-value]');
+  var originalText = btnText ? btnText.textContent : 'Add to Cart';
+
+  /* ---------- 1) Variant matching (pills + selects) ---------- */
+  if (variantSel) {
+    function pickedOptions() {
+      var picks = [];
+      var groups = form.querySelectorAll('.vossa-product-option-group');
+      groups.forEach(function(g) {
+        var sel = g.querySelector('[data-vossa-option-select]');
+        if (sel) {
+          picks.push(sel.value);
+          return;
+        }
+        var active = g.querySelector('.vossa-product-option-value--active');
+        if (active) picks.push(active.getAttribute('data-vossa-option-value'));
+      });
+      return picks;
+    }
+    function syncVariant() {
+      var picks = pickedOptions();
+      if (!picks.length) return;
+      var key = picks.join('||');
+      var match = Array.prototype.find.call(variantSel.options, function(o) {
+        return o.getAttribute('data-vossa-options') === key;
+      });
+      if (!match) return;
+      variantSel.value = match.value;
+
+      var priceCents   = parseInt(match.getAttribute('data-vossa-price'), 10);
+      var compareCents = parseInt(match.getAttribute('data-vossa-compare'), 10) || 0;
+      var available    = match.getAttribute('data-vossa-available') === 'true';
+
+      // Helper: format cents using Shopify's money helper if available, else fallback.
+      // Currency converter apps (Bucks etc.) hook the .money class via MutationObserver
+      // and will re-convert this output to the visitor's currency automatically.
+      function formatCents(cents) {
+        if (window.Shopify && typeof window.Shopify.formatMoney === 'function') {
+          return window.Shopify.formatMoney(cents, window.theme && window.theme.moneyFormat);
+        }
+        // Fallback — base currency display
+        var dollars = (cents / 100);
+        return '$' + (dollars % 1 === 0 ? dollars.toFixed(0) : dollars.toFixed(2));
+      }
+
+      var priceEl   = document.querySelector('[data-vossa-display-price]');
+      var compareEl = document.querySelector('[data-vossa-display-compare]');
+
+      if (priceEl) {
+        priceEl.setAttribute('data-money-cents', priceCents);
+        priceEl.innerHTML = formatCents(priceCents);
+      }
+      if (compareEl) {
+        if (compareCents > priceCents) {
+          compareEl.setAttribute('data-money-cents', compareCents);
+          compareEl.innerHTML = formatCents(compareCents);
+          compareEl.style.display = '';
+        } else {
+          compareEl.style.display = 'none';
+        }
+      }
+
+      // Tell currency-converter apps to re-process the new prices.
+      // Different apps listen for different events — fire them all.
+      [
+        'currency:refresh',           // generic
+        'bcc:update',                 // Bucks pattern
+        'shopify:section:reload',     // some apps
+        'shopify:currency:changed',   // some apps
+        'cssr:refresh'                // currency switcher reload
+      ].forEach(function(name) {
+        document.dispatchEvent(new CustomEvent(name, { bubbles: true }));
+      });
+
+      // Availability state
+      if (btn) {
+        btn.disabled = !available;
+        if (!available && btnText) {
+          btnText.textContent = 'Sold out';
+        } else if (available && btnText && btnText.textContent === 'Sold out') {
+          btnText.textContent = originalText;
+        }
+      }
+    }
+    // Bind pill buttons
+    optionBtns.forEach(function(b) {
+      b.addEventListener('click', function() {
+        var group = b.closest('.vossa-product-option-group');
+        group.querySelectorAll('.vossa-product-option-value').forEach(function(s) {
+          s.classList.remove('vossa-product-option-value--active');
+        });
+        b.classList.add('vossa-product-option-value--active');
+        syncVariant();
+      });
+    });
+    // Bind select dropdowns
+    form.querySelectorAll('[data-vossa-option-select]').forEach(function(sel) {
+      sel.addEventListener('change', syncVariant);
+    });
+  }
+
+  /* ---------- 2) Thumbnail image swap ---------- */
+  var thumbs = document.querySelectorAll('[data-vossa-thumb-src]');
+  var mainImg = document.querySelector('.vossa-product-image');
+  if (thumbs.length && mainImg) {
+    thumbs.forEach(function(t) {
+      t.addEventListener('click', function() {
+        mainImg.src = t.getAttribute('data-vossa-thumb-src');
+      });
+    });
+  }
+
+  /* ---------- 3) AJAX submit + cart-drawer events ---------- */
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    if (!btn || !btnText) return form.submit();
+    btn.disabled = true;
+    btnText.textContent = 'Adding…';
+
+    var formData = new FormData(form);
+    fetch('/cart/add.js', {
+      method: 'POST',
+      body: formData,
+      headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }
+    })
+    .then(function(res) {
+      if (!res.ok) return res.json().then(function(err) { throw err; });
+      return res.json();
+    })
+    .then(function(item) {
+      return fetch('/cart.js', { headers: { 'Accept': 'application/json' } })
+        .then(function(r) { return r.json(); })
+        .then(function(cart) { return { item: item, cart: cart }; });
+    })
+    .then(function(payload) {
+      btnText.textContent = 'Added ✓';
+      btn.disabled = false;
+
+      var events = [
+        ['cart:refresh',          { cart: payload.cart, item: payload.item }],
+        ['cart:updated',          { cart: payload.cart, item: payload.item }],
+        ['cart:added',            { cart: payload.cart, item: payload.item }],
+        ['cart:item-added',       { cart: payload.cart, item: payload.item }],
+        ['cart:open',             { cart: payload.cart }],
+        ['cart-drawer:open',      { cart: payload.cart }],
+        ['ajaxProduct:added',     { cart: payload.cart, item: payload.item }],
+        ['product:added-to-cart', { cart: payload.cart, item: payload.item }]
+      ];
+      events.forEach(function(ev) {
+        document.dispatchEvent(new CustomEvent(ev[0], { bubbles: true, detail: ev[1] }));
+        window.dispatchEvent(new CustomEvent(ev[0], { detail: ev[1] }));
+      });
+
+      if (window.Shopify && typeof window.Shopify.onItemAdded === 'function') {
+        try { window.Shopify.onItemAdded(payload.item); } catch (_) {}
+      }
+      if (window.Shopify && window.Shopify.analytics && typeof window.Shopify.analytics.publish === 'function') {
+        try { window.Shopify.analytics.publish('product_added_to_cart', { cart: payload.cart }); } catch (_) {}
+      }
+
+      setTimeout(function() { btnText.textContent = originalText; }, 2000);
+    })
+    .catch(function(err) {
+      console.warn('[Vossa] AJAX cart failed, falling back to native submit', err);
+      btn.disabled = false;
+      btnText.textContent = originalText;
+      form.removeEventListener('submit', arguments.callee);
+      form.submit();
+    });
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Product — Main",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Buy box copy"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "VOSSA™ · THE MAGNETIC NASAL DILATOR"
+    },
+    {
+      "type": "textarea",
+      "id": "short_value_prop",
+      "label": "Short value prop (under title)",
+      "default": "Engineered to open the nasal valve — the narrowest part of your airway — so you can stop mouth breathing for good."
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Add to cart button text",
+      "default": "Add to Cart"
+    },
+    {
+      "type": "textarea",
+      "id": "trust_line",
+      "label": "Trust line (under CTA)",
+      "default": "7-day trial · Free shipping over $69 · Designed in Canada"
+    },
+    {
+      "type": "header",
+      "content": "Rating chip"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating_chip",
+      "label": "Show rating chip",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "rating_chip_score",
+      "label": "Star rating score",
+      "default": "4.5"
+    },
+    {
+      "type": "text",
+      "id": "rating_chip_label",
+      "label": "Label text",
+      "default": "100,000+ Happy customers"
+    },
+    {
+      "type": "header",
+      "content": "Floating image badge"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_floating_badge",
+      "label": "Show floating badge over image",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "badge_label",
+      "label": "Badge label (small caps)",
+      "default": "INSIDE"
+    },
+    {
+      "type": "text",
+      "id": "badge_value",
+      "label": "Badge value",
+      "default": "90 tabs · 45 nights"
+    },
+    {
+      "type": "header",
+      "content": "What's in the kit (value stack)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_kit_summary",
+      "label": "Show kit summary block",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "kit_eyebrow",
+      "label": "Kit summary eyebrow",
+      "default": "WHAT'S IN THE KIT"
+    },
+    {
+      "type": "header",
+      "content": "Guarantee block (risk reversal)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_guarantee",
+      "label": "Show guarantee pill",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "guarantee_text",
+      "label": "Guarantee text",
+      "default": "7-day money-back guarantee · No questions asked"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    { "name": "Product — Main" }
+  ]
+}
+{% endschema %}

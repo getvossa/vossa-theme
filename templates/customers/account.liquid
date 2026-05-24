@@ -1,0 +1,33 @@
+<section class="vossa-section bg-bone" style="padding-top: 120px;">
+  <div class="vossa-section-inner" style="max-width:780px;">
+    <p class="vossa-eyebrow">Account</p>
+    <h1 style="margin-bottom:24px;">Welcome, {{ customer.first_name }}.</h1>
+    <p style="margin-bottom:32px;"><a href="/account/logout" style="color:var(--sage);">Sign out</a> · <a href="/account/addresses" style="color:var(--sage);">View addresses ({{ customer.addresses_count }})</a></p>
+
+    <h2 style="font-size:24px;margin-bottom:18px;">Order history</h2>
+    {% if customer.orders.size > 0 %}
+      <table style="width:100%;border-collapse:collapse;">
+        <thead>
+          <tr style="border-bottom:1px solid var(--line);text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);">
+            <th style="padding:14px 8px;">Order</th>
+            <th style="padding:14px 8px;">Date</th>
+            <th style="padding:14px 8px;">Total</th>
+            <th style="padding:14px 8px;">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for order in customer.orders %}
+            <tr style="border-bottom:1px solid var(--line);font-size:14px;">
+              <td style="padding:16px 8px;"><a href="{{ order.customer_url }}" style="color:var(--sage);">{{ order.name }}</a></td>
+              <td style="padding:16px 8px;">{{ order.created_at | date: '%b %d, %Y' }}</td>
+              <td style="padding:16px 8px;">{{ order.total_price | money }}</td>
+              <td style="padding:16px 8px;">{{ order.fulfillment_status_label }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p style="color:var(--muted);">No orders yet.</p>
+    {% endif %}
+  </div>
+</section>

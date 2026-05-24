@@ -1,0 +1,55 @@
+<section class="vossa-section research" id="research">
+  <div class="vossa-section-inner center">
+    <p class="vossa-eyebrow">{{ section.settings.eyebrow }}</p>
+    <h2>{{ section.settings.heading }}</h2>
+    <p class="vossa-sub">{{ section.settings.sub }}</p>
+
+    <div class="vossa-research-container">
+      <div class="vossa-stats-grid">
+        <div class="vossa-stat-card glass">
+          <p class="vossa-stat-num">38<span class="pct">%</span></p>
+          <p class="vossa-stat-label">More airflow when the nasal valve is dilated</p>
+          <p class="vossa-stat-source">Royal Victorian Eye &amp; Ear, 2003</p>
+        </div>
+        <div class="vossa-stat-card glass">
+          <p class="vossa-stat-num">18<span class="pct">%</span></p>
+          <p class="vossa-stat-label">Greater oxygen uptake nasal breathing vs. mouth breathing</p>
+          <p class="vossa-stat-source">Journal of Applied Physiology</p>
+        </div>
+        <div class="vossa-stat-card glass">
+          <p class="vossa-stat-num">75<span class="pct">%</span></p>
+          <p class="vossa-stat-label">Lower cavity risk in nasal breathers vs. mouth breathers</p>
+          <p class="vossa-stat-source">Peer-reviewed oral health research</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="vossa-disclaimer">Stats reference peer-reviewed research on nasal breathing and nasal dilation. Vossa is a nasal dilator and is not intended to diagnose, treat, cure, or prevent any medical condition.</p>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Research stats",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Backed by Published Research"
+    },
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "<p>Backed by science.<br>Built for better sleep.</p>"
+    },
+    {
+      "type": "textarea",
+      "id": "sub",
+      "label": "Sub-headline",
+      "default": "The science of nasal dilation is well documented. Vossa is engineered to deliver these benefits in a kit you can actually use every night."
+    }
+  ]
+}
+{% endschema %}

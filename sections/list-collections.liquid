@@ -1,0 +1,38 @@
+<section class="vossa-section" style="padding-top:120px;text-align:center;">
+  <div class="vossa-section-inner">
+    <p class="vossa-eyebrow">{{ section.settings.eyebrow }}</p>
+    <h1>{{ section.settings.heading }}</h1>
+    <p class="vossa-sub">{{ section.settings.sub }}</p>
+
+    {%- if collections.size > 0 -%}
+      <div class="vossa-collection-grid">
+        {%- for collection in collections -%}
+          <a href="{{ collection.url }}" class="vossa-collection-card glass-card">
+            {%- if collection.image != blank -%}
+              <img
+                class="vossa-collection-card-img"
+                src="{{ collection.image | image_url: width: 600 }}"
+                alt="{{ collection.title | escape }}"
+                loading="lazy"
+                width="{{ collection.image.width }}"
+                height="{{ collection.image.height }}">
+            {%- endif -%}
+            <h3>{{ collection.title }}</h3>
+            <p>{{ collection.products_count }} products</p>
+          </a>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "List Collections",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "BROWSE" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "All collections." },
+    { "type": "textarea", "id": "sub", "label": "Sub", "default": "Find what you need to breathe better." }
+  ]
+}
+{% endschema %}

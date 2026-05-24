@@ -1,0 +1,76 @@
+<section class="vossa-section compare">
+  <div class="vossa-section-inner center">
+    <p class="vossa-eyebrow">{{ section.settings.eyebrow }}</p>
+    <h2>{{ section.settings.heading }}</h2>
+    <p class="vossa-sub">{{ section.settings.sub }}</p>
+
+    <div class="vossa-compare-table">
+      <div class="vossa-row">
+        <div class="vossa-cell vossa-head">Feature</div>
+        <div class="vossa-cell vossa-head head-v">Vossa</div>
+        <div class="vossa-cell vossa-head head-o head-o--strong">Nasal Strips</div>
+      </div>
+      <div class="vossa-row">
+        <div class="vossa-cell vossa-feat">Lift mechanism</div>
+        <div class="vossa-cell vossa-v">Magnetic — opens from the sides</div>
+        <div class="vossa-cell vossa-o vossa-o--strong">Adhesive — pulls from the bridge</div>
+      </div>
+      <div class="vossa-row">
+        <div class="vossa-cell vossa-feat">Stays put through sweat</div>
+        <div class="vossa-cell vossa-v"><span class="vossa-check">✓</span></div>
+        <div class="vossa-cell vossa-o vossa-o--strong"><span class="vossa-x">✗</span></div>
+      </div>
+      <div class="vossa-row">
+        <div class="vossa-cell vossa-feat">Reusable</div>
+        <div class="vossa-cell vossa-v"><span class="vossa-check">✓</span> Band reusable, tabs refill</div>
+        <div class="vossa-cell vossa-o vossa-o--strong"><span class="vossa-x">✗</span> Single use</div>
+      </div>
+      <div class="vossa-row">
+        <div class="vossa-cell vossa-feat">Side / back / stomach sleepers</div>
+        <div class="vossa-cell vossa-v">Stays sealed all night</div>
+        <div class="vossa-cell vossa-o vossa-o--strong">Loses grip with movement</div>
+      </div>
+      <div class="vossa-row">
+        <div class="vossa-cell vossa-feat">Skin pull on the bridge</div>
+        <div class="vossa-cell vossa-v">None</div>
+        <div class="vossa-cell vossa-o vossa-o--strong">Tugs every night</div>
+      </div>
+      <div class="vossa-row">
+        <div class="vossa-cell vossa-feat">Cost per night</div>
+        <div class="vossa-cell vossa-v">~$1.11 first kit · ~$0.30 with refills</div>
+        <div class="vossa-cell vossa-o vossa-o--strong">$1.00 – $1.50 every night, forever</div>
+      </div>
+      <div class="vossa-row">
+        <div class="vossa-cell vossa-feat">Risk-free trial</div>
+        <div class="vossa-cell vossa-v">7 days, full refund</div>
+        <div class="vossa-cell vossa-o vossa-o--strong">No</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Comparison",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "What Sets Vossa Apart"
+    },
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "<p>Opens wider. Holds stronger.<br>Never collapses.</p>"
+    },
+    {
+      "type": "textarea",
+      "id": "sub",
+      "label": "Sub-headline",
+      "default": "Old nasal strips pull from the bridge of your nose and peel off. Vossa lifts from the sides with a reusable magnetic band \u2014 no skin pull, no slipping, no waste."
+    }
+  ]
+}
+{% endschema %}

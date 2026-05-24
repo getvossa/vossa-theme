@@ -1,0 +1,39 @@
+<section class="vossa-brand-statement">
+  <svg class="breath-pattern" viewBox="0 0 1200 400" preserveAspectRatio="none">
+    <g fill="none" stroke="currentColor" stroke-width="0.8">
+      <path d="M 0 60 Q 300 0, 600 60 T 1200 60"/>
+      <path d="M 0 100 Q 300 40, 600 100 T 1200 100"/>
+      <path d="M 0 140 Q 300 80, 600 140 T 1200 140"/>
+      <path d="M 0 180 Q 300 120, 600 180 T 1200 180"/>
+      <path d="M 0 220 Q 300 160, 600 220 T 1200 220"/>
+      <path d="M 0 260 Q 300 200, 600 260 T 1200 260"/>
+      <path d="M 0 300 Q 300 240, 600 300 T 1200 300"/>
+      <path d="M 0 340 Q 300 280, 600 340 T 1200 340"/>
+    </g>
+  </svg>
+  <div class="vossa-brand-inner">
+    <div class="vossa-brand-mark vossa-pulse-talk" aria-hidden="true"></div>
+    <blockquote>{{ section.settings.statement }}</blockquote>
+    <p class="vossa-brand-signature">{{ section.settings.signature }}</p>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Brand statement",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "statement",
+      "label": "Brand statement",
+      "default": "Most people spend a third of their life trying to breathe through a half-blocked airway. Vossa exists so that night, the night after, and every one after, your body finally gets the breath it was built for."
+    },
+    {
+      "type": "text",
+      "id": "signature",
+      "label": "Signature",
+      "default": "\u2014 The Vossa Promise"
+    }
+  ]
+}
+{% endschema %}

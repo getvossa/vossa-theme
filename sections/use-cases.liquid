@@ -1,0 +1,129 @@
+<section class="vossa-section usecase">
+  <div class="vossa-section-inner center">
+    <p class="vossa-eyebrow">{{ section.settings.eyebrow }}</p>
+    <h2>{{ section.settings.heading }}</h2>
+    <p class="vossa-sub">{{ section.settings.sub }}</p>
+
+    <div class="vossa-cases">
+      <div class="vossa-case">
+        <div class="vossa-case-visual">
+          {%- if section.settings.image_sleep != blank -%}
+            {%- assign uc_img = section.settings.image_sleep -%}
+            <img
+              class="vossa-case-img"
+              src="{{ uc_img | image_url: width: 800 }}"
+              srcset="{{ uc_img | image_url: width: 400 }} 400w, {{ uc_img | image_url: width: 800 }} 800w, {{ uc_img | image_url: width: 1200 }} 1200w"
+              sizes="(max-width: 900px) 100vw, 33vw"
+              alt="{{ uc_img.alt | default: 'Vossa for sleep' | escape }}"
+              loading="lazy"
+              width="{{ uc_img.width }}"
+              height="{{ uc_img.height }}">
+          {%- else -%}
+            <div class="vossa-case-imgnote">Upload sleep image</div>
+          {%- endif -%}
+          <div class="vossa-case-icon glass">
+            <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          </div>
+        </div>
+        <div class="vossa-case-body">
+          <p class="vossa-case-tag">For Sleep</p>
+          <h3>Stop snoring. Wake up rested.</h3>
+          <p>The magnetic hold doesn't shift through the night — even on your side or stomach. Your partner notices on night one.</p>
+        </div>
+      </div>
+      <div class="vossa-case">
+        <div class="vossa-case-visual">
+          {%- if section.settings.image_sport != blank -%}
+            {%- assign uc_img = section.settings.image_sport -%}
+            <img
+              class="vossa-case-img"
+              src="{{ uc_img | image_url: width: 800 }}"
+              srcset="{{ uc_img | image_url: width: 400 }} 400w, {{ uc_img | image_url: width: 800 }} 800w, {{ uc_img | image_url: width: 1200 }} 1200w"
+              sizes="(max-width: 900px) 100vw, 33vw"
+              alt="{{ uc_img.alt | default: 'Vossa for sport' | escape }}"
+              loading="lazy"
+              width="{{ uc_img.width }}"
+              height="{{ uc_img.height }}">
+          {%- else -%}
+            <div class="vossa-case-imgnote">Upload sport image</div>
+          {%- endif -%}
+          <div class="vossa-case-icon glass">
+            <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg>
+          </div>
+        </div>
+        <div class="vossa-case-body">
+          <p class="vossa-case-tag">For Sport</p>
+          <h3>More air. Sharper output.</h3>
+          <p>Originally engineered for motocross — sweat-proof, vibration-proof, helmet-proof. Run, lift, ride with your nose finally working.</p>
+        </div>
+      </div>
+      <div class="vossa-case">
+        <div class="vossa-case-visual">
+          {%- if section.settings.image_recovery != blank -%}
+            {%- assign uc_img = section.settings.image_recovery -%}
+            <img
+              class="vossa-case-img"
+              src="{{ uc_img | image_url: width: 800 }}"
+              srcset="{{ uc_img | image_url: width: 400 }} 400w, {{ uc_img | image_url: width: 800 }} 800w, {{ uc_img | image_url: width: 1200 }} 1200w"
+              sizes="(max-width: 900px) 100vw, 33vw"
+              alt="{{ uc_img.alt | default: 'Vossa for recovery' | escape }}"
+              loading="lazy"
+              width="{{ uc_img.width }}"
+              height="{{ uc_img.height }}">
+          {%- else -%}
+            <div class="vossa-case-imgnote">Upload recovery image</div>
+          {%- endif -%}
+          <div class="vossa-case-icon glass">
+            <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </div>
+        </div>
+        <div class="vossa-case-body">
+          <p class="vossa-case-tag">For Recovery</p>
+          <h3>Calmer breath. Faster reset.</h3>
+          <p>Slow, deep nasal breathing is the body's natural off-switch. Wear Vossa for breathwork, meditation, or just the wind-down after a hard day.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Use cases",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Built for Real Life"
+    },
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "<p>Sleep, sport, recovery.<br>One kit. Three lives.</p>"
+    },
+    {
+      "type": "textarea",
+      "id": "sub",
+      "label": "Sub-headline",
+      "default": "Vossa was engineered for high-performance use \u2014 but designed so anyone can wear it. Pick the moment your breath has been holding you back."
+    },
+    {
+      "type": "image_picker",
+      "id": "image_sleep",
+      "label": "Sleep image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_sport",
+      "label": "Sport image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_recovery",
+      "label": "Recovery image"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,88 @@
+<section class="vossa-section kit">
+  <div class="vossa-section-inner">
+    <div class="vossa-kit-layout">
+      <div class="vossa-kit-visual">
+        {%- if section.settings.kit_image != blank -%}
+          {%- assign kit_img = section.settings.kit_image -%}
+          <img
+            class="vossa-kit-img"
+            src="{{ kit_img | image_url: width: 1200 }}"
+            srcset="{{ kit_img | image_url: width: 600 }} 600w, {{ kit_img | image_url: width: 1200 }} 1200w, {{ kit_img | image_url: width: 1800 }} 1800w"
+            sizes="(max-width: 900px) 100vw, 50vw"
+            alt="{{ kit_img.alt | default: 'Vossa kit contents' | escape }}"
+            loading="lazy"
+            width="{{ kit_img.width }}"
+            height="{{ kit_img.height }}">
+        {%- else -%}
+          <div class="vossa-kit-imgnote">Upload unboxing image in customizer</div>
+          <div class="vossa-kit-mock" aria-hidden="true">
+            <div class="vossa-kit-disc sm"></div>
+            <div class="vossa-kit-disc"></div>
+            <div class="vossa-kit-disc lg"></div>
+            <div class="vossa-kit-disc"></div>
+            <div class="vossa-kit-disc sm"></div>
+          </div>
+        {%- endif -%}
+      </div>
+      <div class="vossa-kit-list">
+        <p class="vossa-eyebrow">{{ section.settings.eyebrow }}</p>
+        <h2>{{ section.settings.heading }}</h2>
+        <p>{{ section.settings.sub }}</p>
+        <ul class="vossa-kit-items">
+          <li class="vossa-kit-item">
+            <div class="vossa-kit-qty">4</div>
+            <div class="vossa-kit-text">
+              <strong>Reusable Magnetic Bands</strong>
+              <span>Sizes S, M, L, XL — find the fit, keep it forever.</span>
+            </div>
+          </li>
+          <li class="vossa-kit-item">
+            <div class="vossa-kit-qty">90</div>
+            <div class="vossa-kit-text">
+              <strong>Adhesive Tabs</strong>
+              <span>Hypoallergenic, latex-free. Two tabs per session (one on each side) — covers 45 nights of nightly use.</span>
+            </div>
+          </li>
+          <li class="vossa-kit-item">
+            <div class="vossa-kit-qty">1</div>
+            <div class="vossa-kit-text">
+              <strong>Fit &amp; Use Guide</strong>
+              <span>The 60-second guide to applying Vossa for sleep, sport, or all-day wear.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Inside the kit",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "What's in the Box"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The 45-night kit."
+    },
+    {
+      "type": "textarea",
+      "id": "sub",
+      "label": "Sub-headline",
+      "default": "Everything you need for six weeks of better breath. Keep the band forever \u2014 only refill the tabs."
+    },
+    {
+      "type": "image_picker",
+      "id": "kit_image",
+      "label": "Unboxing image"
+    }
+  ]
+}
+{% endschema %}

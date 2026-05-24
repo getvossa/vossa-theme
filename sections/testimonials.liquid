@@ -1,0 +1,99 @@
+<section class="vossa-section testi" id="reviews">
+  <div class="vossa-section-inner">
+    <p class="vossa-eyebrow">{{ section.settings.eyebrow }}</p>
+    <h2>{{ section.settings.heading }}</h2>
+    <p class="vossa-sub">{{ section.settings.sub }}</p>
+
+    <div class="vossa-testi-grid">
+      {%- for i in (1..5) -%}
+        {%- assign name_key    = 'review_name_'    | append: i -%}
+        {%- assign text_key    = 'review_text_'    | append: i -%}
+        {%- assign image_key   = 'review_image_'   | append: i -%}
+        {%- assign product_key = 'review_product_' | append: i -%}
+        {%- assign name_val    = section.settings[name_key] -%}
+        {%- assign text_val    = section.settings[text_key] -%}
+        {%- assign image_val   = section.settings[image_key] -%}
+        {%- assign product_val = section.settings[product_key] -%}
+
+        {%- if name_val != blank -%}
+          <div class="vossa-testi glass-card">
+            <div class="vossa-testi-header">
+              {%- if image_val != blank -%}
+                <div class="vossa-testi-avatar">
+                  <img
+                    class="vossa-testi-avatar-img"
+                    src="{{ image_val | image_url: width: 120 }}"
+                    alt="{{ name_val | escape }}"
+                    loading="lazy"
+                    width="{{ image_val.width }}"
+                    height="{{ image_val.height }}">
+                </div>
+              {%- else -%}
+                <div class="vossa-testi-avatar vossa-testi-avatar--initials">
+                  <span>{{ name_val | slice: 0 }}</span>
+                </div>
+              {%- endif -%}
+              <div class="vossa-testi-meta">
+                <p class="vossa-testi-name">{{ name_val }}</p>
+                <div class="vossa-testi-stars">★★★★★</div>
+              </div>
+            </div>
+            {%- if text_val != blank -%}
+              <p class="vossa-quote">{{ text_val }}</p>
+            {%- endif -%}
+            {%- if product_val != blank -%}
+              <div class="vossa-testi-product">
+                <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+                Verified purchase · {{ product_val }}
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Testimonials",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Real Results" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "What customers are saying." },
+    { "type": "textarea", "id": "sub", "label": "Sub", "default": "From the first 30 nights of use." },
+
+    { "type": "header", "content": "Review 1" },
+    { "type": "text", "id": "review_name_1", "label": "Name (leave empty to hide review)", "default": "Neila M." },
+    { "type": "textarea", "id": "review_text_1", "label": "Review text", "default": "Going well so far after almost 1 month. They have helped a lot due to a deviated septum and sinus congestion." },
+    { "type": "image_picker", "id": "review_image_1", "label": "Photo (optional)" },
+    { "type": "text", "id": "review_product_1", "label": "Product purchased", "default": "Vossa Breathing Starter Kit" },
+
+    { "type": "header", "content": "Review 2" },
+    { "type": "text", "id": "review_name_2", "label": "Name (leave empty to hide review)", "default": "Wieslaw B." },
+    { "type": "textarea", "id": "review_text_2", "label": "Review text", "default": "Exceptional product. I had difficulty gasping for air at night. Vossa has been a remarkable shift." },
+    { "type": "image_picker", "id": "review_image_2", "label": "Photo (optional)" },
+    { "type": "text", "id": "review_product_2", "label": "Product purchased", "default": "Vossa Breathing Starter Kit" },
+
+    { "type": "header", "content": "Review 3" },
+    { "type": "text", "id": "review_name_3", "label": "Name (leave empty to hide review)", "default": "Brett G." },
+    { "type": "textarea", "id": "review_text_3", "label": "Review text", "default": "I've had trouble getting good sleep and wearing the nose strip before bed has been life changing." },
+    { "type": "image_picker", "id": "review_image_3", "label": "Photo (optional)" },
+    { "type": "text", "id": "review_product_3", "label": "Product purchased", "default": "Vossa Breathing Starter Kit" },
+
+    { "type": "header", "content": "Review 4" },
+    { "type": "text", "id": "review_name_4", "label": "Name (leave empty to hide review)" },
+    { "type": "textarea", "id": "review_text_4", "label": "Review text" },
+    { "type": "image_picker", "id": "review_image_4", "label": "Photo (optional)" },
+    { "type": "text", "id": "review_product_4", "label": "Product purchased" },
+
+    { "type": "header", "content": "Review 5" },
+    { "type": "text", "id": "review_name_5", "label": "Name (leave empty to hide review)" },
+    { "type": "textarea", "id": "review_text_5", "label": "Review text" },
+    { "type": "image_picker", "id": "review_image_5", "label": "Photo (optional)" },
+    { "type": "text", "id": "review_product_5", "label": "Product purchased" }
+  ],
+  "presets": [
+    { "name": "Testimonials" }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,27 @@
+<section class="vossa-section bg-bone" style="padding-top: 120px;">
+  <div class="vossa-section-inner center">
+    <p class="vossa-eyebrow">Collection</p>
+    <h1>{{ collection.title }}</h1>
+    {% if collection.description != blank %}
+      <p class="vossa-sub" style="margin-bottom:48px;">{{ collection.description }}</p>
+    {% endif %}
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px;margin-top:32px;">
+      {% for product in collection.products %}
+        <a href="{{ product.url }}" style="text-decoration:none;color:inherit;background:var(--mist);border:1px solid var(--line);border-radius:24px;overflow:hidden;transition:transform 0.3s ease,box-shadow 0.3s ease;display:block;">
+          <div style="aspect-ratio:1/1;background:linear-gradient(160deg, var(--mist) 0%, var(--line) 100%);">
+            {% if product.featured_image %}
+              <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.featured_image.alt | escape }}" style="width:100%;height:100%;object-fit:cover;">
+            {% endif %}
+          </div>
+          <div style="padding:20px 22px;text-align:left;">
+            <p style="font-weight:600;font-size:15px;margin-bottom:6px;color:var(--ink);">{{ product.title }}</p>
+            <p style="font-size:14px;color:var(--sage);font-weight:500;">{{ product.price | money }}</p>
+          </div>
+        </a>
+      {% else %}
+        <p style="color:var(--muted);">No products in this collection yet.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>

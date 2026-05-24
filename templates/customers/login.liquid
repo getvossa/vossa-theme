@@ -1,0 +1,26 @@
+<section class="vossa-section bg-bone" style="padding-top: 120px;text-align:center;">
+  <div class="vossa-section-inner" style="max-width:480px;">
+    <p class="vossa-eyebrow">Account</p>
+    <h1 style="margin-bottom:32px;">Sign in.</h1>
+
+    {% form 'customer_login' %}
+      {{ form.errors | default_errors }}
+      <div style="margin-bottom:14px;">
+        <input type="email" name="customer[email]" placeholder="Email" required style="padding:14px 22px;border-radius:999px;border:1px solid var(--line);background:var(--mist);font-size:14px;font-family:inherit;width:100%;">
+      </div>
+      <div style="margin-bottom:18px;">
+        <input type="password" name="customer[password]" placeholder="Password" required style="padding:14px 22px;border-radius:999px;border:1px solid var(--line);background:var(--mist);font-size:14px;font-family:inherit;width:100%;">
+      </div>
+      <button type="submit" class="vossa-cta" style="font-family:var(--sans);width:100%;justify-content:center;">Sign In <span class="arrow">→</span></button>
+      <p style="margin-top:18px;font-size:13px;"><a href="/account/register" style="color:var(--sage);">Create account</a> · <a href="#recover" onclick="document.getElementById('recover-form').style.display='block';return false;" style="color:var(--muted);">Forgot password?</a></p>
+    {% endform %}
+
+    <div id="recover-form" style="display:none;margin-top:32px;">
+      {% form 'recover_customer_password' %}
+        {{ form.errors | default_errors }}
+        <input type="email" name="email" placeholder="Email" required style="padding:14px 22px;border-radius:999px;border:1px solid var(--line);background:var(--mist);font-size:14px;font-family:inherit;width:100%;margin-bottom:12px;">
+        <button type="submit" class="vossa-cta" style="font-family:var(--sans);width:100%;justify-content:center;">Send Reset Link</button>
+      {% endform %}
+    </div>
+  </div>
+</section>

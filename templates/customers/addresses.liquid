@@ -1,0 +1,16 @@
+<section class="vossa-section bg-bone" style="padding-top: 120px;">
+  <div class="vossa-section-inner" style="max-width:780px;">
+    <p class="vossa-eyebrow">Account</p>
+    <h1 style="margin-bottom:24px;">Your addresses</h1>
+    <p style="margin-bottom:32px;"><a href="/account" style="color:var(--sage);">← Back to account</a></p>
+
+    {% paginate customer.addresses by 5 %}
+      {% for address in customer.addresses %}
+        <div style="background:var(--mist);border:1px solid var(--line);border-radius:18px;padding:24px;margin-bottom:14px;">
+          <p style="font-weight:500;">{{ address.first_name }} {{ address.last_name }}</p>
+          <p style="color:var(--muted);font-size:14px;line-height:1.5;">{{ address | format_address }}</p>
+        </div>
+      {% endfor %}
+    {% endpaginate %}
+  </div>
+</section>

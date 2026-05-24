@@ -1,0 +1,13 @@
+<section class="vossa-section bg-bone" style="padding-top: 120px;text-align:center;">
+  <div class="vossa-section-inner" style="max-width:480px;">
+    <p class="vossa-eyebrow">Account</p>
+    <h1 style="margin-bottom:24px;">Activate your account.</h1>
+
+    {% form 'activate_customer_password' %}
+      {{ form.errors | default_errors }}
+      <div style="margin-bottom:14px;"><input type="password" name="customer[password]" placeholder="Create a password" required style="padding:14px 22px;border-radius:999px;border:1px solid var(--line);background:var(--mist);font-size:14px;font-family:inherit;width:100%;"></div>
+      <div style="margin-bottom:18px;"><input type="password" name="customer[password_confirmation]" placeholder="Confirm password" required style="padding:14px 22px;border-radius:999px;border:1px solid var(--line);background:var(--mist);font-size:14px;font-family:inherit;width:100%;"></div>
+      <button type="submit" class="vossa-cta" style="font-family:var(--sans);width:100%;justify-content:center;">Activate Account</button>
+    {% endform %}
+  </div>
+</section>

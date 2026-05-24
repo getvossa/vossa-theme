@@ -1,0 +1,23 @@
+<section class="vossa-section bg-bone" style="padding-top: 120px;">
+  <div class="vossa-section-inner" style="max-width:780px;">
+    <p class="vossa-eyebrow">Order</p>
+    <h1 style="margin-bottom:18px;">{{ order.name }}</h1>
+    <p style="color:var(--muted);margin-bottom:32px;">Placed {{ order.created_at | date: '%B %d, %Y at %I:%M %p' }}</p>
+
+    <h2 style="font-size:20px;margin-bottom:16px;">Items</h2>
+    {% for line_item in order.line_items %}
+      <div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--line);">
+        <span>{{ line_item.title }} × {{ line_item.quantity }}</span>
+        <span style="font-weight:500;">{{ line_item.final_line_price | money }}</span>
+      </div>
+    {% endfor %}
+
+    <div style="margin-top:24px;text-align:right;">
+      <p>Subtotal: <strong>{{ order.subtotal_price | money }}</strong></p>
+      <p>Shipping: <strong>{{ order.shipping_price | money }}</strong></p>
+      <p style="font-size:18px;margin-top:8px;">Total: <strong>{{ order.total_price | money }}</strong></p>
+    </div>
+
+    <p style="margin-top:32px;"><a href="/account" style="color:var(--sage);">← Back to account</a></p>
+  </div>
+</section>

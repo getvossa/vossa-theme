@@ -1,0 +1,52 @@
+<section class="vossa-section faq" id="faq">
+  <div class="vossa-section-inner center">
+    <p class="vossa-eyebrow">{{ section.settings.eyebrow }}</p>
+    <h2>{{ section.settings.heading }}</h2>
+    <p class="vossa-sub">{{ section.settings.sub }}</p>
+
+    <div class="vossa-faq-list">
+      <details><summary>Will the tabs actually stay on overnight or when I'm sweaty?</summary>
+        <p>Yes. Vossa was engineered for high-intensity use where sweat, movement, and pressure make adhesion tough. Apply to clean, dry skin, press firmly for 10–15 seconds, and the tab stays put through workouts and a full night of sleep.</p></details>
+      <details><summary>Will this change the shape of my nose permanently?</summary>
+        <p>No. Vossa is an external nasal dilator. It temporarily supports the nasal valve to improve airflow while you're wearing it. Your nose returns to its baseline shape the moment you remove it.</p></details>
+      <details><summary>I have sensitive skin. Is the adhesive safe?</summary>
+        <p>Vossa tabs use medical-grade adhesive that's hypoallergenic and latex-free. They sit at the sides of your nose — not on the bridge — so there's no pulling and no pressure points.</p></details>
+      <details><summary>What's in the 90-pack kit?</summary>
+        <p>4 reusable magnetic bands (sizes S, M, L, XL), 90 single-use adhesive tabs (covers 45 nights of nightly use — each session uses two tabs, one per side), a travel case, and a fit &amp; use guide.</p></details>
+      <details><summary>What's your trial and return policy?</summary>
+        <p>7-day trial. If Vossa hasn't changed how you breathe, sleep, or train, mail it back within 7 days for a full refund — no questions asked.</p></details>
+      <details><summary>How much is shipping?</summary>
+        <p>Free shipping on orders over $69 (US). Below $69, a flat shipping rate is calculated at checkout based on your zip code.</p></details>
+      <details><summary>Will it interfere with mouth tape or a CPAP?</summary>
+        <p>Vossa is designed to pair with mouth tape (it sits at the sides of your nose, well clear of the mouth) and works alongside most CPAP setups. If you use a full-face mask, check with your provider first.</p></details>
+      <details><summary>How long does each tab last?</summary>
+        <p>Two tabs per session — one on each side of your nose. A 90-pack covers 45 nights of nightly use.</p></details>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "FAQ",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Common Questions"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What you might be wondering."
+    },
+    {
+      "type": "textarea",
+      "id": "sub",
+      "label": "Sub-headline",
+      "default": "Quick answers. Email us anything else."
+    }
+  ]
+}
+{% endschema %}

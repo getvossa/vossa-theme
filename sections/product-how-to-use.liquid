@@ -1,0 +1,96 @@
+<section class="vossa-section vossa-how-to-use" id="how-to-use">
+  <div class="vossa-section-inner center">
+    <p class="vossa-eyebrow">{{ section.settings.eyebrow }}</p>
+    <h2>{{ section.settings.heading }}</h2>
+    <p class="vossa-sub">{{ section.settings.sub }}</p>
+
+    <div class="vossa-how-to-use-grid">
+      {%- for i in (1..4) -%}
+        {%- assign img_key   = 'step_' | append: i | append: '_image' -%}
+        {%- assign title_key = 'step_' | append: i | append: '_title' -%}
+        {%- assign body_key  = 'step_' | append: i | append: '_body' -%}
+
+        <div class="vossa-how-step glass-card">
+          <div class="vossa-how-step-num glass-pill">
+            <span>{{ i }}</span>
+          </div>
+          <div class="vossa-how-step-visual">
+            {%- if section.settings[img_key] != blank -%}
+              {%- assign step_img = section.settings[img_key] -%}
+              <img
+                class="vossa-how-step-img"
+                src="{{ step_img | image_url: width: 600 }}"
+                srcset="{{ step_img | image_url: width: 300 }} 300w, {{ step_img | image_url: width: 600 }} 600w, {{ step_img | image_url: width: 900 }} 900w"
+                sizes="(max-width: 900px) 50vw, 25vw"
+                alt="{{ step_img.alt | default: section.settings[title_key] | escape }}"
+                loading="lazy"
+                width="{{ step_img.width }}"
+                height="{{ step_img.height }}">
+            {%- else -%}
+              <div class="vossa-how-step-imgnote">
+                <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5" fill="currentColor"/><path d="M21 15l-5-5L5 21"/></svg>
+                <span>Step {{ i }} photo<br>upload in customizer</span>
+              </div>
+            {%- endif -%}
+          </div>
+          <div class="vossa-how-step-body">
+            <h3>{{ section.settings[title_key] }}</h3>
+            <p>{{ section.settings[body_key] }}</p>
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+
+    {%- if section.settings.show_outcome_line -%}
+      <p class="vossa-how-outcome">{{ section.settings.outcome_line }}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Product — How to use",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "HOW TO WEAR VOSSA"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Four steps. Sixty seconds."
+    },
+    {
+      "type": "textarea",
+      "id": "sub",
+      "label": "Sub heading",
+      "default": "Once you find your fit, every night becomes muscle memory. No fumbling, no second-guessing."
+    },
+    { "type": "header", "content": "Step 1" },
+    { "type": "image_picker", "id": "step_1_image", "label": "Image" },
+    { "type": "text", "id": "step_1_title", "label": "Title", "default": "Choose your fit" },
+    { "type": "textarea", "id": "step_1_body", "label": "Body", "default": "Try each of the four magnetic bands — S, M, L, XL — until one wraps your nose without any pressure on the bridge. That band is yours forever." },
+    { "type": "header", "content": "Step 2" },
+    { "type": "image_picker", "id": "step_2_image", "label": "Image" },
+    { "type": "text", "id": "step_2_title", "label": "Title", "default": "Prep the skin" },
+    { "type": "textarea", "id": "step_2_body", "label": "Body", "default": "Wipe each side of your nose with the prep wipe. Let it air dry for 30 seconds. Clean skin is the difference between a tab that lasts the night and one that lifts at 3am." },
+    { "type": "header", "content": "Step 3" },
+    { "type": "image_picker", "id": "step_3_image", "label": "Image" },
+    { "type": "text", "id": "step_3_title", "label": "Title", "default": "Apply the tab" },
+    { "type": "textarea", "id": "step_3_body", "label": "Body", "default": "Peel one adhesive tab. Press it firmly to the side of your nose for 10–15 seconds. Repeat on the other side. Medical-grade adhesive — hypoallergenic, latex-free." },
+    { "type": "header", "content": "Step 4" },
+    { "type": "image_picker", "id": "step_4_image", "label": "Image" },
+    { "type": "text", "id": "step_4_title", "label": "Title", "default": "Snap on the band" },
+    { "type": "textarea", "id": "step_4_body", "label": "Body", "default": "Bring the magnetic band close — it pulls into place automatically. You'll feel the click. Now sleep, train, or recover with your nose finally working." },
+    { "type": "header", "content": "Outcome line (optional)" },
+    { "type": "checkbox", "id": "show_outcome_line", "label": "Show outcome line below steps", "default": true },
+    { "type": "text", "id": "outcome_line", "label": "Outcome line", "default": "Breathe deeper. Sleep harder. Train sharper." }
+  ],
+  "presets": [
+    { "name": "Product — How to use" }
+  ]
+}
+{% endschema %}

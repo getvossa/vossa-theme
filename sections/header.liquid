@@ -1,0 +1,53 @@
+<nav class="vossa-nav">
+  <div class="vossa-nav-inner glass">
+    <a class="vossa-logo" href="/">
+      <span class="vossa-logomark" aria-hidden="true"></span>
+      <span class="vossa-wordmark">{{ section.settings.brand_name | default: 'Vossa' }}</span>
+    </a>
+    <ul class="vossa-nav-links">
+      {%- assign shop_url = '/products/vossa-breathing-starter-kit' -%}
+      {%- if section.settings.shop_collection != blank -%}
+        {%- assign shop_url = section.settings.shop_collection.url -%}
+      {%- elsif section.settings.shop_product != blank -%}
+        {%- assign shop_url = section.settings.shop_product.url -%}
+      {%- endif -%}
+      <li><a href="{{ shop_url }}">Shop</a></li>
+      <li><a href="/#research">Research</a></li>
+      <li><a href="/#how">How It Works</a></li>
+      <li><a href="/#faq">FAQ</a></li>
+    </ul>
+    <a class="vossa-nav-cart" href="{{ shop_url }}">{{ section.settings.cart_text | default: 'Shop' }}</a>
+  </div>
+</nav>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "text",
+      "id": "brand_name",
+      "label": "Brand name",
+      "default": "Vossa"
+    },
+    {
+      "type": "collection",
+      "id": "shop_collection",
+      "label": "Shop link \u2192 collection",
+      "info": "Pick the Featured collection containing your kit + refill. The Shop button will link here."
+    },
+    {
+      "type": "product",
+      "id": "shop_product",
+      "label": "Or shop link \u2192 single product",
+      "info": "Used only if no collection is picked above."
+    },
+    {
+      "type": "text",
+      "id": "cart_text",
+      "label": "Cart button text",
+      "default": "Shop"
+    }
+  ]
+}
+{% endschema %}

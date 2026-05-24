@@ -1,0 +1,8 @@
+<section class="vossa-section bg-bone" style="padding-top: 120px;text-align:center;">
+  <div class="vossa-section-inner" style="max-width:580px;">
+    <p class="vossa-eyebrow">Gift Card</p>
+    <h1 style="margin-bottom:24px;">{{ gift_card.balance | money }}</h1>
+    <p class="vossa-sub">Gift card code:</p>
+    <p style="font-family:monospace;font-size:18px;letter-spacing:0.1em;background:var(--mist);padding:18px;border-radius:16px;display:inline-block;">{{ gift_card.code | format_code }}</p>
+  </div>
+</section>
