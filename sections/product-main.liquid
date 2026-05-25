@@ -798,8 +798,6 @@
 
   if (mainPriceEl) {
 
-    var BUNDLE_PRICE_REGEX = /\$\s?[\d,]+(?:\.\d{1,2})?/;
-
     function findBundleSelection() {
 
       // Look for a checked radio that isn't inside our own variant form
@@ -826,11 +824,39 @@
 
       if (!container) return;
 
-      var match = (container.textContent || '').match(BUNDLE_PRICE_REGEX);
+      var text = container.textContent || '';
 
-      if (!match) return;
+      // Bundle containers typically include multiple dollar amounts:
 
-      mainPriceEl.textContent = match[0];
+      //   1. A "SAVE $X" badge (the savings — NOT what we want)
+
+      //   2. The actual bundle price (what we want)
+
+      //   3. A compare-at price, usually struck through
+
+      // Strategy: collect all $X matches in DOM order, drop any preceded by
+
+      // the word "SAVE", return the first survivor. That's the bundle price.
+
+      var allMatches = [];
+
+      var priceRegex = /\$\s?[\d,]+(?:\.\d{1,2})?/g;
+
+      var m;
+
+      while ((m = priceRegex.exec(text)) !== null) {
+
+        var precedingText = text.substring(Math.max(0, m.index - 10), m.index);
+
+        if (/save\s*$/i.test(precedingText)) continue; // skip savings amounts
+
+        allMatches.push(m[0]);
+
+      }
+
+      if (!allMatches.length) return;
+
+      mainPriceEl.textContent = allMatches[0]; // first non-SAVE = bundle price
 
       mainPriceEl.removeAttribute('data-money-cents'); // stop Bucks re-converting
 
