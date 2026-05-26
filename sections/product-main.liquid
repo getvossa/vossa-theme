@@ -956,6 +956,178 @@
 
   }
 
+  /* ---------- 5) Ka-ching Subscriptions → Bucks Currency bridge ----------
+
+     Ka-ching Subscriptions renders the monthly-subscription price inside
+
+     <span class="ks-discounted-price"> and <span class="ks-original-price">
+
+     elements. Neither has class="money" nor data-money-cents — so Bucks's
+
+     scanner skips them and they stay in the store's base currency (USD)
+
+     even after the visitor switches to CAD on the rest of the page.
+
+     Fix: parse each Ka-ching price element's displayed dollar amount,
+
+     attach class="money" + data-money-cents="<usd-cents>", then dispatch
+
+     Bucks's common re-scan events and call its likely public methods.
+
+     Bucks then picks up the newly tagged elements and converts them on
+
+     every currency change.
+
+     Defensive: tries multiple selectors, multiple refresh-event names,
+
+     multiple direct-API call patterns. Re-runs whenever Ka-ching's DOM
+
+     re-renders (variant change, async UI updates, etc). */
+
+  function tagKachingPricesForBucks() {
+
+    var priceEls = document.querySelectorAll(
+
+      '.ks-discounted-price, .ks-original-price, ' +
+
+      '[data-testid="discounted-price"], [data-testid="original-price"]'
+
+    );
+
+    var newlyTagged = 0;
+
+    for (var i = 0; i < priceEls.length; i++) {
+
+      var el = priceEls[i];
+
+      if (el.classList.contains('money')) continue;
+
+      var text = el.textContent || '';
+
+      var match = text.match(/[\d,]+(?:\.\d{1,2})?/);
+
+      if (!match) continue;
+
+      var dollars = parseFloat(match[0].replace(/,/g, ''));
+
+      if (isNaN(dollars) || dollars <= 0) continue;
+
+      var cents = Math.round(dollars * 100);
+
+      el.setAttribute('data-money-cents', cents);
+
+      el.classList.add('money');
+
+      newlyTagged++;
+
+    }
+
+    if (newlyTagged === 0) return;
+
+    triggerBucksRescan();
+
+  }
+
+  function triggerBucksRescan() {
+
+    var events = [
+
+      'currency:refresh',
+
+      'bcc:update',
+
+      'bcc:refresh',
+
+      'bucks:refresh',
+
+      'shopify:currency:changed',
+
+      'cssr:refresh'
+
+    ];
+
+    events.forEach(function(n) {
+
+      try { document.dispatchEvent(new CustomEvent(n, { bubbles: true })); } catch (e) {}
+
+    });
+
+    try {
+
+      if (window.Currency && typeof window.Currency.convertAll === 'function') {
+
+        var from = window.shop_currency || 'USD';
+
+        var to   = window.Currency.currentCurrency || from;
+
+        window.Currency.convertAll(from, to);
+
+      }
+
+    } catch (e) {}
+
+    try { if (window.BCC   && typeof window.BCC.refresh   === 'function') window.BCC.refresh();   } catch (e) {}
+
+    try { if (window.Bucks && typeof window.Bucks.refresh === 'function') window.Bucks.refresh(); } catch (e) {}
+
+    try { if (window.Bucks && typeof window.Bucks.update  === 'function') window.Bucks.update();  } catch (e) {}
+
+  }
+
+  setTimeout(tagKachingPricesForBucks, 500);
+
+  setTimeout(tagKachingPricesForBucks, 1500);
+
+  setTimeout(tagKachingPricesForBucks, 3000);
+
+  var kachingObserver = new MutationObserver(function(muts) {
+
+    for (var i = 0; i < muts.length; i++) {
+
+      var added = muts[i].addedNodes;
+
+      if (!added || !added.length) continue;
+
+      for (var j = 0; j < added.length; j++) {
+
+        var node = added[j];
+
+        if (node.nodeType !== 1) continue;
+
+        var hit =
+
+          (node.classList && (
+
+            node.classList.contains('ks-discounted-price') ||
+
+            node.classList.contains('ks-original-price')
+
+          )) ||
+
+          (node.querySelector && node.querySelector(
+
+            '.ks-discounted-price, .ks-original-price'
+
+          ));
+
+        if (hit) {
+
+          requestAnimationFrame(tagKachingPricesForBucks);
+
+          return;
+
+        }
+
+      }
+
+    }
+
+  });
+
+  kachingObserver.observe(document.body, { childList: true, subtree: true });
+
+  setTimeout(function() { kachingObserver.disconnect(); }, 30000);
+
 })();
 
 </script>
