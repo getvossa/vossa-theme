@@ -1132,6 +1132,163 @@
 
 </script>
 
+{%- comment -%}
+
+  ============================================
+
+  Fix 1b — Initial-load timing race
+
+  ============================================
+
+  
+
+  PROBLEM:
+
+  On first page load, Fix 1 reads the bundle's price BEFORE Bucks
+
+  finishes converting USD → CAD. Result: bundle widget shows CAD,
+
+  main product price shows USD. Self-corrects on next click.
+
+  
+
+  SOLUTION:
+
+  Watch every .money element (what Bucks targets). Once they stop
+
+  mutating for 250ms (= Bucks done), re-fire a click on the
+
+  currently-selected bundle option. This retriggers Fix 1's existing
+
+  sync handler with the now-converted CAD value.
+
+  
+
+  WHY THIS IS SAFE:
+
+  - Fully additive — doesn't modify Fix 1's code
+
+  - One-shot — runs once per page load, then exits
+
+  - Idempotent — guarded against double-loading
+
+  - Has a 2s safety fallback if Bucks never fires
+
+  
+
+  AUTHOR: Claude · DATE: May 2026 · TIER: A
+
+  ============================================
+
+{%- endcomment -%}
+
+<script>
+
+(function() {
+
+  if (window.__vossaFix1bLoaded) return;
+
+  window.__vossaFix1bLoaded = true;
+
+  function reSyncSelectedBundle() {
+
+    var selected = document.querySelector(
+
+      '.kaching-bundles__option--selected, ' +
+
+      '.kaching-bundles__option.is-selected, ' +
+
+      '.kaching-bundles__option[aria-selected="true"], ' +
+
+      '.kbf-card.is-selected, ' +
+
+      '.kbf-card--selected, ' +
+
+      '[data-kaching-bundle].is-selected, ' +
+
+      '[data-kaching-bundle][aria-selected="true"]'
+
+    );
+
+    if (!selected) return;
+
+    selected.click();
+
+  }
+
+  function init() {
+
+    var moneyEls = document.querySelectorAll('.money[data-money-cents]');
+
+    if (moneyEls.length === 0) {
+
+      requestAnimationFrame(reSyncSelectedBundle);
+
+      return;
+
+    }
+
+    var stableTimer;
+
+    var safetyTimer;
+
+    var done = false;
+
+    function finish() {
+
+      if (done) return;
+
+      done = true;
+
+      clearTimeout(stableTimer);
+
+      clearTimeout(safetyTimer);
+
+      observer.disconnect();
+
+      reSyncSelectedBundle();
+
+    }
+
+    var observer = new MutationObserver(function() {
+
+      clearTimeout(stableTimer);
+
+      stableTimer = setTimeout(finish, 250);
+
+    });
+
+    moneyEls.forEach(function(el) {
+
+      observer.observe(el, {
+
+        childList: true,
+
+        characterData: true,
+
+        subtree: true
+
+      });
+
+    });
+
+    safetyTimer = setTimeout(finish, 2000);
+
+  }
+
+  if (document.readyState === 'loading') {
+
+    document.addEventListener('DOMContentLoaded', init);
+
+  } else {
+
+    init();
+
+  }
+
+})();
+
+</script>
 {% schema %}
 
 {
