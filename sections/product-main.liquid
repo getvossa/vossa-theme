@@ -936,37 +936,23 @@
 
       });
 
-      // Initial sync — wait for Bucks to finish converting the bundle’s
+      // Initial sync — Fix 1’s tricky part. We need THREE things before reading:
 
-      // prices before reading. Otherwise Fix 1 reads USD values, writes them
+      //   1. Ka-ching has injected its widget
 
-      // to main price, strips data-money-cents, and leaves the main price
+      //   2. A bundle option is actually :checked (Ka-ching auto-selects async,
 
-      // stuck in USD forever (since Bucks can no longer re-convert it).
+      //      AFTER tryBindBundleListener first fires)
+
+      //   3. Bucks has finished converting the bundle’s prices
+
+      // Strategy: poll until (1) and (2) are true, then watch (3) via mutations.
 
       (function initialBucksAwareSync() {
 
-        var container = findBundleSelection();
+        var pollTimer, watchObs, stableTimer, safetyTimer, done = false;
 
-        if (!container) {
-
-          requestAnimationFrame(syncBundleToMainPrice);
-
-          return;
-
-        }
-
-        var moneyEls = container.querySelectorAll('.money[data-money-cents]');
-
-        if (moneyEls.length === 0) {
-
-          requestAnimationFrame(syncBundleToMainPrice);
-
-          return;
-
-        }
-
-        var stableTimer, safetyTimer, done = false;
+        var pollAttempts = 0;
 
         function finish() {
 
@@ -974,33 +960,71 @@
 
           done = true;
 
+          clearTimeout(pollTimer);
+
           clearTimeout(stableTimer);
 
           clearTimeout(safetyTimer);
 
-          obs.disconnect();
+          if (watchObs) watchObs.disconnect();
 
           syncBundleToMainPrice();
 
         }
 
-        var obs = new MutationObserver(function() {
+        function poll() {
 
-          clearTimeout(stableTimer);
+          pollAttempts++;
 
-          stableTimer = setTimeout(finish, 300);
+          var container = findBundleSelection();
 
-        });
+          if (container) {
 
-        moneyEls.forEach(function(el) {
+            var moneyEls = container.querySelectorAll('.money[data-money-cents]');
 
-          obs.observe(el, { childList: true, characterData: true, subtree: true });
+            if (moneyEls.length > 0) {
 
-        });
+              // Got a checked bundle with Bucks-eligible prices.
 
-        // Safety net: if Bucks never runs (USD-only visitor), sync after 1500ms
+              // Watch them for mutations; sync 300ms after they stabilize.
 
-        safetyTimer = setTimeout(finish, 1500);
+              watchObs = new MutationObserver(function() {
+
+                clearTimeout(stableTimer);
+
+                stableTimer = setTimeout(finish, 300);
+
+              });
+
+              moneyEls.forEach(function(el) {
+
+                watchObs.observe(el, { childList: true, characterData: true, subtree: true });
+
+              });
+
+              // If Bucks already finished before we attached, no mutations will
+
+              // fire — sync after 500ms regardless
+
+              stableTimer = setTimeout(finish, 500);
+
+              return;
+
+            }
+
+          }
+
+          if (pollAttempts < 30) { // 30 × 100ms = 3s polling window
+
+            pollTimer = setTimeout(poll, 100);
+
+          }
+
+        }
+
+        poll();
+
+        safetyTimer = setTimeout(finish, 3500); // hard cap
 
       })();
 
