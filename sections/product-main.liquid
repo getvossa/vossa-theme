@@ -164,6 +164,28 @@
 
         </div>
 
+        {%- if product.handle == 'vossa-breathing-starter-kit' %}
+
+          <div class="vossa-founding-pill" role="status" aria-label="Founding customer pricing">
+
+            <span class="vossa-founding-pill__dot" aria-hidden="true"></span>
+
+            <div class="vossa-founding-pill__text">
+
+              <span class="vossa-founding-pill__eyebrow">Founding Customer Pricing</span>
+
+              <span class="vossa-founding-pill__body">
+
+                <strong data-founding-count>83</strong> spots remaining · Then $74.99
+
+              </span>
+
+            </div>
+
+          </div>
+
+        {%- endif %}
+
         {%- comment -%} Variant picker — supports color + shape style {%- endcomment -%}
 
         {%- if product.variants.size > 1 -%}
@@ -768,7 +790,7 @@
 
   });
 
-  /* ---------- 4) Ka-ching Bundles → main product price sync ----------
+  /* ---------- 4)  Bundles → main product price sync ----------
 
      Ka-ching Bundles injects its widget at runtime via app-embed. When the
 
